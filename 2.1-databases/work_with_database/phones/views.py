@@ -7,20 +7,35 @@ def index(request):
     return redirect('catalog')
 
 
+# def show_catalog(request):
+#     template = 'catalog.html'
+#     phones = Phone.objects.all()
+#     sort = request.GET.get('sort')
+#     if sort == 'name':
+#         phones = Phone.objects.all().order_by('name')
+#     if sort == 'min_price':
+#         phones = Phone.objects.all().order_by('price')
+#     if sort == 'max_price':
+#         phones = Phone.objects.all().order_by('-price')
+#     context = {
+#         'phones': phones
+#     }
+#     return render(request, template, context)
+
 def show_catalog(request):
-    template = 'catalog.html'
-    phones = Phone.objects.all()
-    sort = request.GET.get('sort')
-    if sort == 'name':
-        phones = Phone.objects.all().order_by('name')
-    if sort == 'min_price':
-        phones = Phone.objects.all().order_by('price')
-    if sort == 'max_price':
-        phones = Phone.objects.all().order_by('-price')
-    context = {
-        'phones': phones
-    }
-    return render(request, template, context)
+
+	SORT_MAP = {
+    'name': 'name',
+    'min_price': 'price',
+    'max_price': '-price',
+    },
+phones = Phone.objects.all()
+sort = request.GET.get('sort')
+   
+if sort:
+phones = phones.order_by(SORT_MAP[sort])
+context = {'phones': phones}
+return render(request, template, context)
 
 
 def show_product(request, slug):
